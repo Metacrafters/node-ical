@@ -154,8 +154,11 @@ function getTimeZone(value) {
   if (tz && tz.startsWith('(')) {
     // Extract just the offset
     const regex = /[+|-]\d*:\d*/;
-    tz = null;
-    found = tz.match(regex);
+    const result = tz.match(regex);
+    if (result && result.length > 0) {
+      found = result[0];
+      tz = null;
+    }
   }
 
   // Timezone not confirmed yet
@@ -262,8 +265,10 @@ const dateParameter = function (name) {
           // Extract just the offset
           const regex = /[+|-]\d*:\d*/;
           offset = tz.match(regex);
-          tz = null;
-          found = offset;
+          if (offset && offset.length > 0) {
+            found = offset[0];
+            tz = null;
+          }
         }
 
         // Timezone not confirmed yet
