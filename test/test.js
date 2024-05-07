@@ -1051,6 +1051,24 @@ vows
           assert.equal(task.summary, 'test export import');
         }
       }
+    },
+    'with test_with_offset_timezones.ics': {
+      topic() {
+        return ical.parseFile('./test/test_with_offset_timezones.ics');
+      },
+      'using an event containing a start date with offset time zone in a Microsoft ical feed': {
+        'topic'(events) {
+          return _.select(_.values(events), x => {
+            return x.summary === 'Test Event 123';
+          })[0];
+        },
+        'it uses the offset timezone'(event) {
+          // Correct: assert.equal(event.start.toJSON(), '2024-04-29T21:00:00.000Z');
+          // Correct: assert.equal(event.end.toJSON(), '2024-04-29T23:00:00.000Z');
+          assert.equal(event.start.toJSON(), '2024-04-29T17:00:00.000Z');
+          assert.equal(event.end.toJSON(), '2024-04-29T19:00:00.000Z');
+        }
+      }
     }
   })
   .export(module);
